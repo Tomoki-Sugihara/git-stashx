@@ -4,11 +4,12 @@
 
 このプロジェクトは、Gitの作業状態をバックアップ・復元するDenoベースのCLIツールです。
 
-
 ## 作業注意点
 
 ### 作業終了時
+
 必ず作業終了時に`afplay ~/dotfiles/claude/bell.wav`を実行して知らせてください。
+
 ```bash
 afplay ~/dotfiles/claude/bell.wav
 ```
@@ -16,14 +17,17 @@ afplay ~/dotfiles/claude/bell.wav
 ## 開発ガイドライン
 
 ### プロジェクト固有のガイドライン
+
 詳細な開発ガイドラインは [docs/rules/development-guide.md](docs/rules/development-guide.md) を参照してください。
 
 ### Deno開発の一般的なベストプラクティス
+
 Deno開発における包括的なガイドライン（コード構成、セキュリティ、パフォーマンス、テスト等）については [docs/rules/deno-development-guide.md](docs/rules/deno-development-guide.md) を参照してください。
 
 ## コマンド
 
 ### lint と format
+
 ```bash
 deno fmt
 deno lint

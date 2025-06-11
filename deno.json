@@ -1,0 +1,45 @@
+{
+  "imports": {
+    "@std/cli/parse-args": "jsr:@std/cli@^1.0.0/parse-args"
+  },
+  "tasks": {
+    "dev": "deno run --allow-run --allow-read --allow-write mod.ts",
+    "install": "deno install --global --allow-run --allow-read --allow-write --name git-backup --config deno.json mod.ts -f",
+    "test": "deno test --allow-run --allow-read --allow-write",
+    "fmt": "deno fmt",
+    "lint": "deno lint"
+  },
+  "fmt": {
+    "include": [
+      "src/",
+      "tests/",
+      "mod.ts"
+    ],
+    "exclude": [],
+    "useTabs": false,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "semiColons": true,
+    "singleQuote": false,
+    "proseWrap": "preserve"
+  },
+  "lint": {
+    "include": [
+      "src/",
+      "tests/",
+      "mod.ts"
+    ],
+    "exclude": [],
+    "rules": {
+      "tags": [
+        "recommended"
+      ]
+    }
+  },
+  "compilerOptions": {
+    "lib": [
+      "deno.window"
+    ],
+    "strict": true
+  }
+}

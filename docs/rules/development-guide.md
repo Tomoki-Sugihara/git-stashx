@@ -67,7 +67,7 @@ git-backup/
 
 ```typescript
 // src/commands/save.ts
-export async function saveBackup(description?: string): Promise<void>
+export async function saveBackup(description?: string): Promise<void>;
 ```
 
 1. 作業状態をチェック
@@ -79,7 +79,7 @@ export async function saveBackup(description?: string): Promise<void>
 
 ```typescript
 // src/commands/restore.ts
-export async function restoreBackup(backupName?: string): Promise<void>
+export async function restoreBackup(backupName?: string): Promise<void>;
 ```
 
 1. バックアップブランチの存在確認
@@ -91,11 +91,11 @@ export async function restoreBackup(backupName?: string): Promise<void>
 
 ```typescript
 // src/utils/git.ts
-export async function runGitCommand(args: string[]): Promise<GitCommandResult>
-export async function getCurrentBranch(): Promise<string>
-export async function hasChanges(): Promise<boolean>
-export async function getStagedFiles(): Promise<string[]>
-export async function getUnstagedFiles(): Promise<string[]>
+export async function runGitCommand(args: string[]): Promise<GitCommandResult>;
+export async function getCurrentBranch(): Promise<string>;
+export async function hasChanges(): Promise<boolean>;
+export async function getStagedFiles(): Promise<string[]>;
+export async function getUnstagedFiles(): Promise<string[]>;
 ```
 
 ## エラーハンドリング
