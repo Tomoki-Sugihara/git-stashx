@@ -16,7 +16,7 @@ afplay ~/dotfiles/claude/bell.wav
 ## 開発ガイドライン
 
 ### プロジェクト固有のガイドライン
-詳細な開発ガイドラインは [docs/development-guide.md](docs/development-guide.md) を参照してください。
+詳細な開発ガイドラインは [docs/rules/development-guide.md](docs/rules/development-guide.md) を参照してください。
 
 ### Deno開発の一般的なベストプラクティス
 Deno開発における包括的なガイドライン（コード構成、セキュリティ、パフォーマンス、テスト等）については [docs/rules/deno-development-guide.md](docs/rules/deno-development-guide.md) を参照してください。
