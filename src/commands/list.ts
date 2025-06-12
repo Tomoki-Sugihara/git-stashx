@@ -1,63 +1,6 @@
-import { BackupInfo, STAGED_COMMIT_MESSAGE, UNSTAGED_COMMIT_MESSAGE } from "../types.ts";
-import { getBackupBranches, isGitRepository, runGitCommand } from "../utils/git.ts";
-import { formatRelativeTime, parseBackupDate } from "../utils/date.ts";
-
-async function getBackupInfo(branchName: string): Promise<BackupInfo> {
-  const info: BackupInfo = {
-    name: branchName,
-    branch: branchName,
-    date: new Date(),
-    stagedCommit: "",
-    unstagedCommit: "",
-  };
-
-  // Extract date from branch name
-  const dateMatch = branchName.match(/(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/);
-  if (dateMatch) {
-    const parsedDate = parseBackupDate(dateMatch[1]);
-    if (parsedDate) {
-      info.date = parsedDate;
-    }
-  }
-
-  // Get commits on the backup branch
-  const logResult = await runGitCommand([
-    "log",
-    "--oneline",
-    "--no-merges",
-    `${branchName}`,
-    "--not",
-    "--all",
-    `--exclude=${branchName}`,
-  ]);
-
-  if (logResult.success) {
-    const commits = logResult.stdout.trim().split("\n").filter((line) => line.length > 0);
-
-    for (const commit of commits) {
-      const [hash, ...messageParts] = commit.split(" ");
-      const message = messageParts.join(" ");
-
-      if (message.startsWith(STAGED_COMMIT_MESSAGE)) {
-        info.stagedCommit = hash;
-        const descMatch = message.match(/ - (.+)$/);
-        if (descMatch) {
-          info.description = descMatch[1];
-        }
-      } else if (message.startsWith(UNSTAGED_COMMIT_MESSAGE)) {
-        info.unstagedCommit = hash;
-        if (!info.description) {
-          const descMatch = message.match(/ - (.+)$/);
-          if (descMatch) {
-            info.description = descMatch[1];
-          }
-        }
-      }
-    }
-  }
-
-  return info;
-}
+import { getBackupBranches, isGitRepository } from "../utils/git.ts";
+import { formatRelativeTime } from "../utils/date.ts";
+import { getBackupInfo } from "../utils/backup.ts";
 
 export async function listBackups(): Promise<void> {
   // Verify we're in a git repository

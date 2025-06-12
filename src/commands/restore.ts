@@ -1,4 +1,3 @@
-import { BackupInfo, STAGED_COMMIT_MESSAGE, UNSTAGED_COMMIT_MESSAGE } from "../types.ts";
 import {
   branchExists,
   cherryPick,
@@ -7,69 +6,10 @@ import {
   isGitRepository,
   resetMixed,
   resetSoft,
-  runGitCommand,
 } from "../utils/git.ts";
-import { formatRelativeTime, parseBackupDate } from "../utils/date.ts";
+import { formatRelativeTime } from "../utils/date.ts";
 import { select } from "../utils/prompt.ts";
-
-async function getBackupInfo(branchName: string): Promise<BackupInfo> {
-  let stagedCommit: string = "";
-  let unstagedCommit: string = "";
-  let date: Date = new Date();
-  let description: string = "";
-
-  // Extract date from branch name
-  const dateMatch = branchName.match(/(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/);
-  if (dateMatch) {
-    const parsedDate = parseBackupDate(dateMatch[1]);
-    if (parsedDate) {
-      date = parsedDate;
-    }
-  }
-
-  // Get commits on the backup branch (latest 2 commits only)
-  const logResult = await runGitCommand([
-    "log",
-    "-n",
-    "2",
-    "--oneline",
-    branchName,
-  ]);
-
-  if (logResult.success) {
-    const commits = logResult.stdout.trim().split("\n").filter((line) => line.length > 0);
-
-    for (const commit of commits) {
-      const [hash, ...messageParts] = commit.split(" ");
-      const message = messageParts.join(" ");
-
-      if (message.startsWith(STAGED_COMMIT_MESSAGE)) {
-        stagedCommit = hash;
-        const descMatch = message.match(/ - (.+)$/);
-        if (descMatch) {
-          description = descMatch[1];
-        }
-      } else if (message.startsWith(UNSTAGED_COMMIT_MESSAGE)) {
-        unstagedCommit = hash;
-        if (!description) {
-          const descMatch = message.match(/ - (.+)$/);
-          if (descMatch) {
-            description = descMatch[1];
-          }
-        }
-      }
-    }
-  }
-
-  return {
-    name: branchName,
-    branch: branchName,
-    date: date,
-    description: description,
-    stagedCommit: stagedCommit,
-    unstagedCommit: unstagedCommit,
-  };
-}
+import { getBackupInfo } from "../utils/backup.ts";
 
 async function selectBackup(): Promise<string | null> {
   const branches = await getBackupBranches();
@@ -152,8 +92,8 @@ export async function restoreBackup(backupName?: string): Promise<void> {
     console.log("  ✓ Original staging state restored");
 
     console.log("\nBackup restored successfully!");
-  } catch (error: any) {
-    console.error("\nError during restoration:", error.message);
+  } catch (error) {
+    console.error("\nError during restoration:", (error as Error).message);
     console.error("You may need to resolve conflicts manually.");
     throw error;
   }
