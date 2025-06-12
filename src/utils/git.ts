@@ -99,7 +99,7 @@ export async function addAllFiles(): Promise<void> {
 }
 
 export async function commit(message: string): Promise<string> {
-  const result = await runGitCommand(["commit", "-m", message]);
+  const result = await runGitCommand(["commit", "--allow-empty", "-m", message]);
   if (!result.success) {
     throw new Error(`Failed to commit: ${result.stderr}`);
   }

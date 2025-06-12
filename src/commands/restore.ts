@@ -13,18 +13,18 @@ import { formatRelativeTime, parseBackupDate } from "../utils/date.ts";
 import { confirm, select } from "../utils/prompt.ts";
 
 async function getBackupInfo(branchName: string): Promise<BackupInfo> {
-  const info: BackupInfo = {
-    name: branchName,
-    branch: branchName,
-    date: new Date(),
-  };
+  let stagedCommit: string = '';
+  let unstagedCommit: string = '';
+  let date: Date = new Date();
+  let description: string = '';
+  
 
   // Extract date from branch name
   const dateMatch = branchName.match(/(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/);
   if (dateMatch) {
     const parsedDate = parseBackupDate(dateMatch[1]);
     if (parsedDate) {
-      info.date = parsedDate;
+      date = parsedDate;
     }
   }
 
@@ -47,24 +47,31 @@ async function getBackupInfo(branchName: string): Promise<BackupInfo> {
       const message = messageParts.join(" ");
 
       if (message.startsWith(STAGED_COMMIT_MESSAGE)) {
-        info.stagedCommit = hash;
+        stagedCommit = hash;
         const descMatch = message.match(/ - (.+)$/);
         if (descMatch) {
-          info.description = descMatch[1];
+          description = descMatch[1];
         }
       } else if (message.startsWith(UNSTAGED_COMMIT_MESSAGE)) {
-        info.unstagedCommit = hash;
-        if (!info.description) {
+        unstagedCommit = hash;
+        if (!description) {
           const descMatch = message.match(/ - (.+)$/);
           if (descMatch) {
-            info.description = descMatch[1];
+            description = descMatch[1];
           }
         }
       }
     }
   }
 
-  return info;
+  return {
+    name: branchName,
+    branch: branchName,
+    date: date,
+    description: description,
+    stagedCommit: stagedCommit,
+    unstagedCommit: unstagedCommit,
+  };
 }
 
 async function selectBackup(): Promise<string | null> {
@@ -130,45 +137,24 @@ export async function restoreBackup(backupName?: string): Promise<void> {
   }
   console.log(`Created: ${formatRelativeTime(backupInfo.date)}`);
 
-  // Confirm restoration
-  const confirmed = await confirm("\nProceed with restoration?", true);
-  if (!confirmed) {
-    console.log("Restoration cancelled");
-    return;
-  }
-
   try {
-    let hasRestoredStaged = false;
-    let hasRestoredUnstaged = false;
-
     // Restore staged changes
-    if (backupInfo.stagedCommit) {
-      console.log("\nRestoring staged changes...");
       await cherryPick(backupInfo.stagedCommit);
-      hasRestoredStaged = true;
       console.log("  ✓ Staged changes restored");
-    }
 
     // Restore unstaged changes
-    if (backupInfo.unstagedCommit) {
       console.log("Restoring unstaged changes...");
       await cherryPick(backupInfo.unstagedCommit);
-      hasRestoredUnstaged = true;
       console.log("  ✓ Unstaged changes restored");
-    }
 
     // Reset to restore the original staging state
-    if (hasRestoredStaged && hasRestoredUnstaged) {
-      // Both commits were applied, need to unstage the second commit
-      console.log("Restoring original staging state...");
-      await resetMixed("HEAD~1");
-      console.log("  ✓ Original staging state restored");
-    } else if (hasRestoredStaged && !hasRestoredUnstaged) {
-      // Only staged commit was applied, need to unstage it
       console.log("Restoring original staging state...");
       await resetSoft("HEAD~1");
       console.log("  ✓ Original staging state restored");
-    }
+
+      console.log("Restoring original staging state...");
+      await resetMixed("HEAD~1");
+      console.log("  ✓ Original staging state restored");
 
     console.log("\nBackup restored successfully!");
   } catch (error) {
