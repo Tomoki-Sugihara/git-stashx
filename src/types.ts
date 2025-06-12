@@ -10,8 +10,8 @@ export interface BackupInfo {
   branch: string;
   date: Date;
   description?: string;
-  stagedCommit?: string;
-  unstagedCommit?: string;
+  stagedCommit: string;
+  unstagedCommit: string;
 }
 
 export interface FileStatus {
