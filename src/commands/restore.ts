@@ -13,10 +13,10 @@ import { formatRelativeTime, parseBackupDate } from "../utils/date.ts";
 import { select } from "../utils/prompt.ts";
 
 async function getBackupInfo(branchName: string): Promise<BackupInfo> {
-  let stagedCommit: string = '';
-  let unstagedCommit: string = '';
+  let stagedCommit: string = "";
+  let unstagedCommit: string = "";
   let date: Date = new Date();
-  let description: string = '';
+  let description: string = "";
 
   // Extract date from branch name
   const dateMatch = branchName.match(/(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/);
@@ -138,7 +138,7 @@ export async function restoreBackup(backupName?: string): Promise<void> {
     console.log("Restoring staged changes...");
     await cherryPick(backupInfo.stagedCommit);
     console.log("  ✓ Staged changes restored");
-    
+
     console.log("Restoring unstaged changes...");
     await cherryPick(backupInfo.unstagedCommit);
     console.log("  ✓ Unstaged changes restored");

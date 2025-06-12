@@ -7,8 +7,8 @@ async function getBackupInfo(branchName: string): Promise<BackupInfo> {
     name: branchName,
     branch: branchName,
     date: new Date(),
-    stagedCommit: '',
-    unstagedCommit: '',
+    stagedCommit: "",
+    unstagedCommit: "",
   };
 
   // Extract date from branch name
