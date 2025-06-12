@@ -6,16 +6,6 @@ export async function prompt(message: string): Promise<string> {
   return new TextDecoder().decode(buf.subarray(0, n)).trim();
 }
 
-export async function confirm(message: string, defaultValue = false): Promise<boolean> {
-  const suffix = defaultValue ? " [Y/n]: " : " [y/N]: ";
-  const answer = await prompt(message + suffix);
-
-  if (answer === "") return defaultValue;
-
-  const normalized = answer.toLowerCase();
-  return normalized === "y" || normalized === "yes";
-}
-
 export async function select<T>(
   message: string,
   options: Array<{ value: T; label: string }>,

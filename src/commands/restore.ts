@@ -10,14 +10,13 @@ import {
   runGitCommand,
 } from "../utils/git.ts";
 import { formatRelativeTime, parseBackupDate } from "../utils/date.ts";
-import { confirm, select } from "../utils/prompt.ts";
+import { select } from "../utils/prompt.ts";
 
 async function getBackupInfo(branchName: string): Promise<BackupInfo> {
   let stagedCommit: string = '';
   let unstagedCommit: string = '';
   let date: Date = new Date();
   let description: string = '';
-  
 
   // Extract date from branch name
   const dateMatch = branchName.match(/(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/);
