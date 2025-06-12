@@ -28,15 +28,13 @@ async function getBackupInfo(branchName: string): Promise<BackupInfo> {
     }
   }
 
-  // Get commits on the backup branch
+  // Get commits on the backup branch (latest 2 commits only)
   const logResult = await runGitCommand([
     "log",
+    "-n",
+    "2",
     "--oneline",
-    "--no-merges",
-    `${branchName}`,
-    "--not",
-    "--all",
-    `--exclude=${branchName}`,
+    branchName,
   ]);
 
   if (logResult.success) {
@@ -138,26 +136,24 @@ export async function restoreBackup(backupName?: string): Promise<void> {
   console.log(`Created: ${formatRelativeTime(backupInfo.date)}`);
 
   try {
-    // Restore staged changes
-      await cherryPick(backupInfo.stagedCommit);
-      console.log("  ✓ Staged changes restored");
+    console.log("Restoring staged changes...");
+    await cherryPick(backupInfo.stagedCommit);
+    console.log("  ✓ Staged changes restored");
+    
+    console.log("Restoring unstaged changes...");
+    await cherryPick(backupInfo.unstagedCommit);
+    console.log("  ✓ Unstaged changes restored");
 
-    // Restore unstaged changes
-      console.log("Restoring unstaged changes...");
-      await cherryPick(backupInfo.unstagedCommit);
-      console.log("  ✓ Unstaged changes restored");
+    console.log("Restoring original staging state...");
+    await resetMixed("HEAD~1");
+    console.log("  ✓ Original staging state restored");
 
-    // Reset to restore the original staging state
-      console.log("Restoring original staging state...");
-      await resetSoft("HEAD~1");
-      console.log("  ✓ Original staging state restored");
-
-      console.log("Restoring original staging state...");
-      await resetMixed("HEAD~1");
-      console.log("  ✓ Original staging state restored");
+    console.log("Restoring original staging state...");
+    await resetSoft("HEAD~1");
+    console.log("  ✓ Original staging state restored");
 
     console.log("\nBackup restored successfully!");
-  } catch (error) {
+  } catch (error: any) {
     console.error("\nError during restoration:", error.message);
     console.error("You may need to resolve conflicts manually.");
     throw error;
