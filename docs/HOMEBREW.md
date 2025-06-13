@@ -2,7 +2,7 @@
 
 ## 概要
 
-git-backupをHomebrewで公開するための手順書です。
+git-stashxをHomebrewで公開するための手順書です。
 
 ## 事前準備
 
@@ -27,7 +27,7 @@ GitHub Actionsが自動的にビルドを実行し、バイナリをリリース
 リリースが作成されたら、ソースコードのtarballのSHA256を計算します：
 
 ```bash
-curl -L https://github.com/yourusername/git-backup/archive/refs/tags/v1.0.0.tar.gz | shasum -a 256
+curl -L https://github.com/yourusername/git-stashx/archive/refs/tags/v1.0.0.tar.gz | shasum -a 256
 ```
 
 ### 3. Homebrew Tap の作成
@@ -39,15 +39,15 @@ curl -L https://github.com/yourusername/git-backup/archive/refs/tags/v1.0.0.tar.
 
 ```bash
 mkdir -p Formula
-cp homebrew/git-backup.rb Formula/
+cp homebrew/git-stashx.rb Formula/
 # SHA256とURLを更新
 ```
 
 3. コミットしてプッシュ
 
 ```bash
-git add Formula/git-backup.rb
-git commit -m "Add git-backup v1.0.0"
+git add Formula/git-stashx.rb
+git commit -m "Add git-stashx v1.0.0"
 git push
 ```
 
@@ -58,15 +58,15 @@ git push
 brew tap yourusername/tap
 
 # インストール
-brew install git-backup
+brew install git-stashx
 
 # 動作確認
-git-backup version
+git-stashx version
 ```
 
 ## Formulaの更新
 
-`homebrew/git-backup.rb` の以下の項目を更新する必要があります：
+`homebrew/git-stashx.rb` の以下の項目を更新する必要があります：
 
 - `homepage`: 実際のGitHubリポジトリURL
 - `url`: リリースのtarball URL

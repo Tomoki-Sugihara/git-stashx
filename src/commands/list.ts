@@ -1,32 +1,32 @@
-import { getBackupBranches, isGitRepository } from "../utils/git.ts";
+import { getStashBranches, isGitRepository } from "../utils/git.ts";
 import { formatRelativeTime } from "../utils/date.ts";
-import { getBackupInfo } from "../utils/backup.ts";
+import { getStashInfo } from "../utils/stash.ts";
 
-export async function listBackups(): Promise<void> {
+export async function listStashs(): Promise<void> {
   // Verify we're in a git repository
   if (!await isGitRepository()) {
     throw new Error("Not in a git repository");
   }
 
-  const branches = await getBackupBranches();
+  const branches = await getStashBranches();
 
   if (branches.length === 0) {
-    console.log("No backups found");
+    console.log("No stashs found");
     return;
   }
 
-  console.log("Available backups:\n");
+  console.log("Available stashs:\n");
 
-  // Get info for each backup
-  const backupInfos = await Promise.all(
-    branches.map((branch) => getBackupInfo(branch)),
+  // Get info for each stash
+  const stashInfos = await Promise.all(
+    branches.map((branch) => getStashInfo(branch)),
   );
 
   // Sort by date (newest first)
-  backupInfos.sort((a, b) => b.date.getTime() - a.date.getTime());
+  stashInfos.sort((a, b) => b.date.getTime() - a.date.getTime());
 
-  // Display backups
-  for (const info of backupInfos) {
+  // Display stashs
+  for (const info of stashInfos) {
     console.log(`• ${info.branch}`);
     console.log(`  Created: ${formatRelativeTime(info.date)} (${info.date.toLocaleString()})`);
     if (info.description) {
@@ -42,7 +42,7 @@ export async function listBackups(): Promise<void> {
     console.log();
   }
 
-  console.log(`Total: ${backupInfos.length} backup${backupInfos.length > 1 ? "s" : ""}`);
-  console.log("\nTo restore a backup, run:");
-  console.log("  git-backup restore [backup-name]");
+  console.log(`Total: ${stashInfos.length} stash${stashInfos.length > 1 ? "s" : ""}`);
+  console.log("\nTo restore a stash, run:");
+  console.log("  git-stashx restore [stash-name]");
 }

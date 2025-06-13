@@ -1,4 +1,4 @@
-# git-backup プロジェクト情報
+# git-stashx プロジェクト情報
 
 ## 概要
 

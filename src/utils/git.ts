@@ -1,4 +1,4 @@
-import { BACKUP_PREFIX, FileStatus, GitCommandResult } from "../types.ts";
+import { FileStatus, GitCommandResult, STASH_PREFIX } from "../types.ts";
 
 export async function runGitCommand(args: string[]): Promise<GitCommandResult> {
   const command = new Deno.Command("git", {
@@ -130,8 +130,8 @@ export async function resetMixed(commitRef: string = "HEAD~1"): Promise<void> {
   }
 }
 
-export async function getBackupBranches(): Promise<string[]> {
-  const result = await runGitCommand(["branch", "--list", `${BACKUP_PREFIX}*`]);
+export async function getStashBranches(): Promise<string[]> {
+  const result = await runGitCommand(["branch", "--list", `${STASH_PREFIX}*`]);
   if (!result.success) {
     throw new Error("Failed to list branches: " + result.stderr);
   }

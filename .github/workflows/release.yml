@@ -33,15 +33,15 @@ jobs:
     - name: Build binary
       run: |
         deno compile --allow-run --allow-read --allow-write \
-          --output git-backup-${{ matrix.suffix }} \
+          --output git-stashx-${{ matrix.suffix }} \
           --target ${{ matrix.target }} \
           mod.ts
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: git-backup-${{ matrix.suffix }}
-        path: git-backup-${{ matrix.suffix }}
+        name: git-stashx-${{ matrix.suffix }}
+        path: git-stashx-${{ matrix.suffix }}
 
   release:
     needs: build
@@ -68,7 +68,7 @@ jobs:
 
     - name: Upload Release Assets
       run: |
-        for file in ./artifacts/*/git-backup-*; do
+        for file in ./artifacts/*/git-stashx-*; do
           filename=$(basename "$file")
           echo "Uploading $filename"
           curl -X POST \

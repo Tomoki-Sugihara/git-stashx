@@ -4,7 +4,7 @@
   },
   "tasks": {
     "dev": "deno run --allow-run --allow-read --allow-write mod.ts",
-    "install": "deno install --global --allow-run --allow-read --allow-write --name git-backup --config deno.json mod.ts -f",
+    "install": "deno install --global --allow-run --allow-read --allow-write --name git-stashx --config deno.json mod.ts -f",
     "test": "deno test --allow-run --allow-read --allow-write",
     "fmt": "deno fmt",
     "fmt:watch": "deno fmt --watch",

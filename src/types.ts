@@ -5,7 +5,7 @@ export interface GitCommandResult {
   code: number;
 }
 
-export interface BackupInfo {
+export interface StashInfo {
   name: string;
   branch: string;
   date: Date;
@@ -20,6 +20,6 @@ export interface FileStatus {
   untracked: string[];
 }
 
-export const BACKUP_PREFIX = "backup/";
+export const STASH_PREFIX = "stash/";
 export const STAGED_COMMIT_MESSAGE = "Staged changes";
 export const UNSTAGED_COMMIT_MESSAGE = "Unstaged changes";

@@ -1,8 +1,8 @@
-import { BackupInfo, STAGED_COMMIT_MESSAGE, UNSTAGED_COMMIT_MESSAGE } from "../types.ts";
+import { STAGED_COMMIT_MESSAGE, StashInfo, UNSTAGED_COMMIT_MESSAGE } from "../types.ts";
 import { runGitCommand } from "./git.ts";
-import { parseBackupDate } from "./date.ts";
+import { parseStashDate } from "./date.ts";
 
-export async function getBackupInfo(branchName: string): Promise<BackupInfo> {
+export async function getStashInfo(branchName: string): Promise<StashInfo> {
   let stagedCommit: string = "";
   let unstagedCommit: string = "";
   let date: Date = new Date();
@@ -11,13 +11,13 @@ export async function getBackupInfo(branchName: string): Promise<BackupInfo> {
   // Extract date from branch name
   const dateMatch = branchName.match(/(\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2})/);
   if (dateMatch) {
-    const parsedDate = parseBackupDate(dateMatch[1]);
+    const parsedDate = parseStashDate(dateMatch[1]);
     if (parsedDate) {
       date = parsedDate;
     }
   }
 
-  // Get commits on the backup branch (latest 2 commits only)
+  // Get commits on the stash branch (latest 2 commits only)
   const logResult = await runGitCommand([
     "log",
     "-n",

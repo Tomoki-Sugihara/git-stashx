@@ -1,15 +1,15 @@
-# git-backup
+# git-stashx
 
 Gitの作業状態（ステージング状態と未ステージの変更）をバックアップ・復元するCLIツール。
 
 ## 概要
 
-`git-backup`は、`git stash`と異なり、ステージング状態を保持したままバックアップを作成し、後で正確に復元できるツールです。バックアップは専用のブランチとして保存されるため、通常のGit操作で管理できます。
+`git-stashx`は、`git stash`と異なり、ステージング状態を保持したままバックアップを作成し、後で正確に復元できるツールです。バックアップは専用のブランチとして保存されるため、通常のGit操作で管理できます。
 
 ## 特徴
 
 - ステージング状態と未ステージの変更を別々のコミットとして保存
-- バックアップはブランチとして管理（`backup/YYYY-MM-DD-HH-mm-ss`形式）
+- バックアップはブランチとして管理（`stashx/YYYY-MM-DD-HH-mm-ss`形式）
 - 対話的な復元機能
 - 新規ファイル（untracked files）も含めてバックアップ
 - `.gitignore`されたファイルは自動的に除外
@@ -18,7 +18,7 @@ Gitの作業状態（ステージング状態と未ステージの変更）を�
 
 ```bash
 # Denoがインストールされている必要があります
-deno install --allow-run --allow-read --allow-write --name git-backup mod.ts
+deno install --allow-run --allow-read --allow-write --name git-stashx mod.ts
 ```
 
 ## 使い方
@@ -26,7 +26,7 @@ deno install --allow-run --allow-read --allow-write --name git-backup mod.ts
 ### バックアップの作成
 
 ```bash
-git-backup save [description]
+git-stashx save [description]
 ```
 
 - 現在の作業状態をバックアップします
@@ -36,17 +36,17 @@ git-backup save [description]
 ### バックアップの復元
 
 ```bash
-git-backup restore [backup-name]
+git-stashx restore [stash-name]
 ```
 
 - 指定したバックアップを復元します
-- `backup-name`を省略すると、対話的に選択できます
+- `stash-name`を省略すると、対話的に選択できます
 - 現在の作業ディレクトリがクリーンでない場合はエラーになります
 
 ### バックアップ一覧の表示
 
 ```bash
-git-backup list
+git-stashx list
 ```
 
 - 作成済みのバックアップ一覧を表示します
@@ -56,7 +56,7 @@ git-backup list
 
 ### バックアップ処理
 
-1. 新しいブランチを作成（`backup/YYYY-MM-DD-HH-mm-ss`）
+1. 新しいブランチを作成（`stashx/YYYY-MM-DD-HH-mm-ss`）
 2. ステージング済みの変更をコミット（"Staged changes"）
 3. ステージング前の変更と新規ファイルをコミット（"Unstaged changes"）
 4. 元のブランチに戻る

@@ -1,4 +1,4 @@
-export function formatBackupDate(date: Date = new Date()): string {
+export function formatStashDate(date: Date = new Date()): string {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
@@ -9,7 +9,7 @@ export function formatBackupDate(date: Date = new Date()): string {
   return `${year}-${month}-${day}-${hours}-${minutes}-${seconds}`;
 }
 
-export function parseBackupDate(dateString: string): Date | null {
+export function parseStashDate(dateString: string): Date | null {
   const match = dateString.match(/(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})/);
   if (!match) return null;
 

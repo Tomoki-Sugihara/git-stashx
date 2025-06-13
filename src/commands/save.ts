@@ -1,4 +1,4 @@
-import { BACKUP_PREFIX, STAGED_COMMIT_MESSAGE, UNSTAGED_COMMIT_MESSAGE } from "../types.ts";
+import { STAGED_COMMIT_MESSAGE, STASH_PREFIX, UNSTAGED_COMMIT_MESSAGE } from "../types.ts";
 import {
   addAllFiles,
   checkoutBranch,
@@ -9,31 +9,31 @@ import {
   hasChanges,
   isGitRepository,
 } from "../utils/git.ts";
-import { formatBackupDate } from "../utils/date.ts";
+import { formatStashDate } from "../utils/date.ts";
 
-export async function saveBackup(description?: string): Promise<void> {
+export async function saveStash(description?: string): Promise<void> {
   // Verify we're in a git repository
   if (!await isGitRepository()) {
     throw new Error("Not in a git repository");
   }
 
-  // Check if there are any changes to backup
+  // Check if there are any changes to stash
   if (!await hasChanges()) {
-    console.log("No changes to backup");
+    console.log("No changes to stash");
     return;
   }
 
   const originalBranch = await getCurrentBranch();
-  const backupBranchName = `${BACKUP_PREFIX}${formatBackupDate()}`;
+  const stashBranchName = `${STASH_PREFIX}${formatStashDate()}`;
 
-  console.log(`Creating backup branch: ${backupBranchName}`);
+  console.log(`Creating stash branch: ${stashBranchName}`);
 
   try {
-    // Get file status before creating backup
+    // Get file status before creating stash
     const fileStatus = await getFileStatus();
 
-    // Create and switch to backup branch
-    await createBranch(backupBranchName);
+    // Create and switch to stash branch
+    await createBranch(stashBranchName);
 
     // First commit: staged changes
     if (fileStatus.staged.length > 0) {
@@ -64,13 +64,13 @@ export async function saveBackup(description?: string): Promise<void> {
     // Return to original branch
     await checkoutBranch(originalBranch);
 
-    console.log("\nBackup created successfully!");
-    console.log(`Branch: ${backupBranchName}`);
+    console.log("\nStash created successfully!");
+    console.log(`Branch: ${stashBranchName}`);
     if (description) {
       console.log(`Description: ${description}`);
     }
-    console.log("\nTo restore this backup, run:");
-    console.log(`  git-backup restore ${backupBranchName}`);
+    console.log("\nTo restore this stash, run:");
+    console.log(`  git-stashx restore ${stashBranchName}`);
   } catch (error) {
     // Try to return to original branch if something went wrong
     try {

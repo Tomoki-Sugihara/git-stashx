@@ -1,8 +1,8 @@
-# git-backup 開発ガイドライン
+# git-stashx 開発ガイドライン
 
 ## プロジェクト概要
 
-git-backupは、Gitの作業状態をバックアップ・復元するDenoベースのCLIツールです。
+git-stashxは、Gitの作業状態をバックアップ・復元するDenoベースのCLIツールです。
 
 ## 技術スタック
 
@@ -13,7 +13,7 @@ git-backupは、Gitの作業状態をバックアップ・復元するDenoベー
 ## ディレクトリ構造
 
 ```
-git-backup/
+git-stashx/
 ├── mod.ts                 # エントリーポイント
 ├── src/
 │   ├── commands/
@@ -51,9 +51,9 @@ git-backup/
 ### 命名規則
 
 - ファイル名: snake_case（例: `git_utils.ts`）
-- 関数名: camelCase（例: `createBackupBranch`）
-- 定数: UPPER_SNAKE_CASE（例: `BACKUP_PREFIX`）
-- 型/インターフェース: PascalCase（例: `BackupInfo`）
+- 関数名: camelCase（例: `createStashBranch`）
+- 定数: UPPER_SNAKE_CASE（例: `STASH_PREFIX`）
+- 型/インターフェース: PascalCase（例: `StashInfo`）
 
 ### Git操作
 
@@ -67,7 +67,7 @@ git-backup/
 
 ```typescript
 // src/commands/save.ts
-export async function saveBackup(description?: string): Promise<void>;
+export async function saveStash(description?: string): Promise<void>;
 ```
 
 1. 作業状態をチェック
@@ -79,7 +79,7 @@ export async function saveBackup(description?: string): Promise<void>;
 
 ```typescript
 // src/commands/restore.ts
-export async function restoreBackup(backupName?: string): Promise<void>;
+export async function restoreStash(stashName?: string): Promise<void>;
 ```
 
 1. バックアップブランチの存在確認

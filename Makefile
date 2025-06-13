@@ -1,7 +1,7 @@
-# Makefile for git-backup
+# Makefile for git-stashx
 
 VERSION := 1.0.0
-BINARY_NAME := git-backup
+BINARY_NAME := git-stashx
 INSTALL_DIR := /usr/local/bin
 
 # Build targets for different platforms

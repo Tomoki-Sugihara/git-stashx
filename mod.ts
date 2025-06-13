@@ -1,30 +1,30 @@
 #!/usr/bin/env -S deno run --allow-run --allow-read --allow-write
 
 import { parseArgs } from "@std/cli/parse-args";
-import { saveBackup } from "./src/commands/save.ts";
-import { restoreBackup } from "./src/commands/restore.ts";
-import { listBackups } from "./src/commands/list.ts";
+import { saveStash } from "./src/commands/save.ts";
+import { restoreStash } from "./src/commands/restore.ts";
+import { listStashs } from "./src/commands/list.ts";
 
 const VERSION = "1.0.0";
 
 function printHelp(): void {
-  console.log(`git-backup v${VERSION}
+  console.log(`git-stashx v${VERSION}
 
 Usage:
-  git-backup <command> [options]
+  git-stashx <command> [options]
 
 Commands:
-  save [description]    Create a backup of the current working state
-  restore [backup-name] Restore a backup (interactive if name not provided)
-  list                  List all available backups
+  save [description]    Create a stash of the current working state
+  restore [stash-name] Restore a stash (interactive if name not provided)
+  list                  List all available stashs
   help                  Show this help message
   version               Show version
 
 Examples:
-  git-backup save "WIP: implementing new feature"
-  git-backup restore
-  git-backup restore backup/2024-01-01-12-00-00
-  git-backup list
+  git-stashx save "WIP: implementing new feature"
+  git-stashx restore
+  git-stashx restore stashx/2024-01-01-12-00-00
+  git-stashx list
 `);
 }
 
@@ -40,7 +40,7 @@ async function main(): Promise<void> {
   }
 
   if (args.version) {
-    console.log(`git-backup v${VERSION}`);
+    console.log(`git-stashx v${VERSION}`);
     Deno.exit(0);
   }
 
@@ -50,16 +50,16 @@ async function main(): Promise<void> {
     switch (command) {
       case "save": {
         const description = args._[1]?.toString();
-        await saveBackup(description);
+        await saveStash(description);
         break;
       }
       case "restore": {
-        const backupName = args._[1]?.toString();
-        await restoreBackup(backupName);
+        const stashName = args._[1]?.toString();
+        await restoreStash(stashName);
         break;
       }
       case "list": {
-        await listBackups();
+        await listStashs();
         break;
       }
       case "help": {
@@ -67,12 +67,12 @@ async function main(): Promise<void> {
         break;
       }
       case "version": {
-        console.log(`git-backup v${VERSION}`);
+        console.log(`git-stashx v${VERSION}`);
         break;
       }
       default: {
         console.error(`Unknown command: ${command}`);
-        console.error("Run 'git-backup help' for usage information");
+        console.error("Run 'git-stashx help' for usage information");
         Deno.exit(1);
       }
     }

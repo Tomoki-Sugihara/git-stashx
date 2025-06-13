@@ -1,7 +1,7 @@
-class GitBackup < Formula
-  desc "CLI tool to backup and restore Git working state including staging status"
-  homepage "https://github.com/yourusername/git-backup"
-  url "https://github.com/yourusername/git-backup/archive/refs/tags/v1.0.0.tar.gz"
+class GitStash < Formula
+  desc "CLI tool to stash and restore Git working state including staging status"
+  homepage "https://github.com/yourusername/git-stashx"
+  url "https://github.com/yourusername/git-stashx/archive/refs/tags/v1.0.0.tar.gz"
   sha256 "PLACEHOLDER_SHA256"
   license "MIT"
 
@@ -13,20 +13,20 @@ class GitBackup < Formula
     libexec.install "mod.ts"
     
     # Create wrapper script
-    (bin/"git-backup").write <<~EOS
+    (bin/"git-stashx").write <<~EOS
       #!/bin/bash
       exec deno run --allow-run --allow-read --allow-write "#{libexec}/mod.ts" "$@"
     EOS
     
     # Make it executable
-    chmod 0755, bin/"git-backup"
+    chmod 0755, bin/"git-stashx"
   end
 
   test do
     # Test version command
-    assert_match "git-backup version 1.0.0", shell_output("#{bin}/git-backup version")
+    assert_match "git-stashx version 1.0.0", shell_output("#{bin}/git-stashx version")
     
     # Test help command
-    assert_match "Usage: git-backup", shell_output("#{bin}/git-backup help")
+    assert_match "Usage: git-stashx", shell_output("#{bin}/git-stashx help")
   end
 end
